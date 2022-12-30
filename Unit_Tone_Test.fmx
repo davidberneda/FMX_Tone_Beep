@@ -1,0 +1,234 @@
+object ToneDemo: TToneDemo
+  Left = 0
+  Top = 0
+  Caption = 'FMX Tone Test Demo'
+  ClientHeight = 434
+  ClientWidth = 413
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 0
+  object Button1: TButton
+    Position.X = 17.000000000000000000
+    Position.Y = 14.000000000000000000
+    TabOrder = 2
+    Text = '&Beep'
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Position.X = 17.000000000000000000
+    Position.Y = 158.000000000000000000
+    TabOrder = 1
+    Text = '&Play'
+    OnClick = Button2Click
+  end
+  object TBDuration: TTrackBar
+    CanParentFocus = True
+    Max = 1000.000000000000000000
+    Min = 1.000000000000000000
+    Orientation = Horizontal
+    Position.X = 17.000000000000000000
+    Position.Y = 102.000000000000000000
+    TabOrder = 4
+    Value = 200.000000000000000000
+    OnChange = TBDurationChange
+  end
+  object TextDuration: TText
+    Position.X = 125.000000000000000000
+    Position.Y = 104.000000000000000000
+    Size.Width = 114.000000000000000000
+    Size.Height = 16.000000000000000000
+    Size.PlatformDefault = False
+    Text = '200 msec.'
+  end
+  object Label1: TLabel
+    FocusControl = TBDuration
+    Position.X = 15.000000000000000000
+    Position.Y = 62.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 39.000000000000000000
+    Size.PlatformDefault = False
+    Text = '&Duration:'
+    TabOrder = 7
+  end
+  object Label2: TLabel
+    FocusControl = TBFrequency
+    Position.X = 15.000000000000000000
+    Position.Y = 206.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 46.000000000000000000
+    Size.PlatformDefault = False
+    Text = '&Frequency:'
+    TabOrder = 6
+  end
+  object TBFrequency: TTrackBar
+    CanParentFocus = True
+    Max = 10000.000000000000000000
+    Min = 1.000000000000000000
+    Orientation = Horizontal
+    Position.X = 17.000000000000000000
+    Position.Y = 253.000000000000000000
+    TabOrder = 3
+    Value = 1000.000000000000000000
+    OnChange = TBFrequencyChange
+  end
+  object TextFrequency: TText
+    Position.X = 125.000000000000000000
+    Position.Y = 255.000000000000000000
+    Size.Width = 114.000000000000000000
+    Size.Height = 16.000000000000000000
+    Size.PlatformDefault = False
+    Text = '1000 Hertz'
+  end
+  object Layout1: TLayout
+    Position.X = 17.000000000000000000
+    Position.Y = 295.000000000000000000
+    Size.Width = 210.000000000000000000
+    Size.Height = 77.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 9
+    object RectangleDo: TRectangle
+      Align = Left
+      Cursor = crHandPoint
+      Fill.Color = claWhite
+      Hint = 'Do'
+      Size.Width = 30.000000000000000000
+      Size.Height = 77.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleSi: TRectangle
+      Align = Left
+      Cursor = crHandPoint
+      Fill.Color = claWhite
+      Hint = 'Si'
+      Position.X = 180.000000000000000000
+      Size.Width = 30.000000000000000000
+      Size.Height = 77.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleLa: TRectangle
+      Align = Left
+      Cursor = crHandPoint
+      Fill.Color = claWhite
+      Hint = 'La'
+      Position.X = 150.000000000000000000
+      Size.Width = 30.000000000000000000
+      Size.Height = 77.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleSol: TRectangle
+      Align = Left
+      Cursor = crHandPoint
+      Fill.Color = claWhite
+      Hint = 'Sol'
+      Position.X = 120.000000000000000000
+      Size.Width = 30.000000000000000000
+      Size.Height = 77.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleFa: TRectangle
+      Align = Left
+      Cursor = crHandPoint
+      Fill.Color = claWhite
+      Hint = 'Fa'
+      Position.X = 90.000000000000000000
+      Size.Width = 30.000000000000000000
+      Size.Height = 77.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleMi: TRectangle
+      Align = Left
+      Cursor = crHandPoint
+      Fill.Color = claWhite
+      Hint = 'Mi'
+      Position.X = 60.000000000000000000
+      Size.Width = 30.000000000000000000
+      Size.Height = 77.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleRe: TRectangle
+      Align = Left
+      Cursor = crHandPoint
+      Fill.Color = claWhite
+      Hint = 'Re'
+      Position.X = 30.000000000000000000
+      Size.Width = 30.000000000000000000
+      Size.Height = 77.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleReB: TRectangle
+      Cursor = crHandPoint
+      Fill.Color = claBlack
+      Position.X = 23.000000000000000000
+      Size.Width = 14.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleMiB: TRectangle
+      Cursor = crHandPoint
+      Fill.Color = claBlack
+      Position.X = 53.000000000000000000
+      Size.Width = 14.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleSolB: TRectangle
+      Cursor = crHandPoint
+      Fill.Color = claBlack
+      Position.X = 113.000000000000000000
+      Size.Width = 14.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleLaB: TRectangle
+      Cursor = crHandPoint
+      Fill.Color = claBlack
+      Position.X = 143.000000000000000000
+      Size.Width = 14.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+    object RectangleSiB: TRectangle
+      Cursor = crHandPoint
+      Fill.Color = claBlack
+      Position.X = 173.000000000000000000
+      Size.Width = 14.000000000000000000
+      Size.Height = 48.000000000000000000
+      Size.PlatformDefault = False
+      OnMouseDown = RectangleDoMouseDown
+    end
+  end
+  object Button3: TButton
+    Position.X = 117.000000000000000000
+    Position.Y = 158.000000000000000000
+    TabOrder = 0
+    Text = '&Play PCM'
+    Visible = False
+    OnClick = Button3Click
+  end
+  object GitHub: TText
+    Cursor = crHandPoint
+    Position.X = 17.000000000000000000
+    Position.Y = 396.000000000000000000
+    Size.Width = 361.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'https://github.com/davidberneda/FMX_Tone_Beep'
+    TextSettings.FontColor = claBlue
+    TextSettings.HorzAlign = Leading
+    OnClick = GitHubClick
+  end
+end
