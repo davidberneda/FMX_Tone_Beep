@@ -3,7 +3,7 @@ object ToneDemo: TToneDemo
   Top = 0
   Caption = 'FMX Tone Test Demo'
   ClientHeight = 434
-  ClientWidth = 413
+  ClientWidth = 354
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
@@ -13,14 +13,14 @@ object ToneDemo: TToneDemo
   object Button1: TButton
     Position.X = 17.000000000000000000
     Position.Y = 14.000000000000000000
-    TabOrder = 2
+    TabOrder = 1
     Text = '&Beep'
     OnClick = Button1Click
   end
   object Button2: TButton
     Position.X = 17.000000000000000000
     Position.Y = 158.000000000000000000
-    TabOrder = 1
+    TabOrder = 0
     Text = '&Play'
     OnClick = Button2Click
   end
@@ -31,7 +31,7 @@ object ToneDemo: TToneDemo
     Orientation = Horizontal
     Position.X = 17.000000000000000000
     Position.Y = 102.000000000000000000
-    TabOrder = 4
+    TabOrder = 3
     Value = 200.000000000000000000
     OnChange = TBDurationChange
   end
@@ -51,7 +51,7 @@ object ToneDemo: TToneDemo
     Size.Height = 39.000000000000000000
     Size.PlatformDefault = False
     Text = '&Duration:'
-    TabOrder = 7
+    TabOrder = 6
   end
   object Label2: TLabel
     FocusControl = TBFrequency
@@ -61,16 +61,16 @@ object ToneDemo: TToneDemo
     Size.Height = 46.000000000000000000
     Size.PlatformDefault = False
     Text = '&Frequency:'
-    TabOrder = 6
+    TabOrder = 5
   end
   object TBFrequency: TTrackBar
     CanParentFocus = True
-    Max = 10000.000000000000000000
+    Max = 3000.000000000000000000
     Min = 1.000000000000000000
     Orientation = Horizontal
     Position.X = 17.000000000000000000
     Position.Y = 253.000000000000000000
-    TabOrder = 3
+    TabOrder = 2
     Value = 1000.000000000000000000
     OnChange = TBFrequencyChange
   end
@@ -88,7 +88,7 @@ object ToneDemo: TToneDemo
     Size.Width = 210.000000000000000000
     Size.Height = 77.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 9
+    TabOrder = 8
     object RectangleDo: TRectangle
       Align = Left
       Cursor = crHandPoint
@@ -211,24 +211,46 @@ object ToneDemo: TToneDemo
       OnMouseDown = RectangleDoMouseDown
     end
   end
-  object Button3: TButton
-    Position.X = 117.000000000000000000
-    Position.Y = 158.000000000000000000
-    TabOrder = 0
-    Text = '&Play PCM'
-    Visible = False
-    OnClick = Button3Click
-  end
   object GitHub: TText
     Cursor = crHandPoint
     Position.X = 17.000000000000000000
     Position.Y = 396.000000000000000000
-    Size.Width = 361.000000000000000000
+    Size.Width = 321.000000000000000000
     Size.Height = 17.000000000000000000
     Size.PlatformDefault = False
     Text = 'https://github.com/davidberneda/FMX_Tone_Beep'
     TextSettings.FontColor = claBlue
     TextSettings.HorzAlign = Leading
     OnClick = GitHubClick
+  end
+  object ButtonChart: TButton
+    Position.X = 117.000000000000000000
+    Position.Y = 14.000000000000000000
+    TabOrder = 10
+    Text = '&Chart'
+    OnClick = ButtonChartClick
+  end
+  object CBUsePCM: TCheckBox
+    Position.X = 125.000000000000000000
+    Position.Y = 150.000000000000000000
+    Size.Width = 140.000000000000000000
+    Size.Height = 19.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 11
+    Text = '&Use PCM'
+    OnChange = CBUsePCMChange
+  end
+  object CBWave: TComboBox
+    Items.Strings = (
+      'Sine'
+      'Square')
+    ItemIndex = 0
+    Position.X = 125.000000000000000000
+    Position.Y = 177.000000000000000000
+    Size.Width = 152.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 16
+    OnChange = CBWaveChange
   end
 end

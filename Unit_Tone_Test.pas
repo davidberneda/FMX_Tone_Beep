@@ -2,10 +2,15 @@ unit Unit_Tone_Test;
 
 interface
 
+// https://github.com/davidberneda/FMX_Tone_Beep
+
+// Enable this DEFINE if you have TeeChart components installed.
+{.$DEFINE TEECHART}  // <-- remove the "."
+
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs,
-  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Layouts;
+  FMX.Controls.Presentation, FMX.StdCtrls, FMX.Objects, FMX.Layouts, FMX.ListBox;
 
 type
   TToneDemo = class(TForm)
@@ -30,8 +35,10 @@ type
     RectangleSolB: TRectangle;
     RectangleLaB: TRectangle;
     RectangleSiB: TRectangle;
-    Button3: TButton;
     GitHub: TText;
+    ButtonChart: TButton;
+    CBUsePCM: TCheckBox;
+    CBWave: TComboBox;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure TBDurationChange(Sender: TObject);
@@ -39,8 +46,10 @@ type
     procedure RectangleDoMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Single);
     procedure FormCreate(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
     procedure GitHubClick(Sender: TObject);
+    procedure ButtonChartClick(Sender: TObject);
+    procedure CBUsePCMChange(Sender: TObject);
+    procedure CBWaveChange(Sender: TObject);
   private
     { Private declarations }
 
@@ -57,7 +66,20 @@ implementation
 {$R *.fmx}
 
 uses
-  FMX_Tone, FMX_OpenURL;
+  FMX_Tone,
+
+  {$IFDEF TEECHART}
+  FMX_Tone_Chart,
+  {$ENDIF}
+
+  FMX_OpenURL;
+
+procedure TToneDemo.ButtonChartClick(Sender: TObject);
+begin
+  {$IFDEF TEECHART}
+  TFormChart.Edit(Self, TBFrequency.Value, Round(TBDuration.Value));
+  {$ENDIF}
+end;
 
 function TToneDemo.Duration:Integer;
 begin
@@ -66,8 +88,12 @@ end;
 
 procedure TToneDemo.FormCreate(Sender: TObject);
 begin
-  {$IFDEF MSWINDOWS}
-  Button3.Visible:=True;
+  {$IFNDEF MSWINDOWS}
+  CBUsePCM.Visible:=False;
+  {$ENDIF}
+
+  {$IFNDEF TEECHART}
+  ButtonChart.Visible:=False;
   {$ENDIF}
 end;
 
@@ -86,11 +112,19 @@ begin
   TTone.Play(Round(TBFrequency.Value), Duration);
 end;
 
-procedure TToneDemo.Button3Click(Sender: TObject);
+procedure TToneDemo.CBUsePCMChange(Sender: TObject);
 begin
   {$IFDEF MSWINDOWS}
-  TTone.PlayPCM(Round(TBFrequency.Value), Duration);
+  TTone.UsePCM:=CBUsePCM.IsChecked;
   {$ENDIF}
+end;
+
+procedure TToneDemo.CBWaveChange(Sender: TObject);
+begin
+  case CBWave.ItemIndex of
+    0: TTone.WaveStyle:=TWaveStyle.Sine;
+    1: TTone.WaveStyle:=TWaveStyle.Square;
+  end;
 end;
 
 procedure TToneDemo.RectangleDoMouseDown(Sender: TObject; Button: TMouseButton;

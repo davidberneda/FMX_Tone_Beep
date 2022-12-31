@@ -21,6 +21,16 @@ uses
 
 class procedure TOpenURL.Go(const URL: string);
 begin
+  {$IFDEF ANDROID}
+  {
+    tmpIntent:=TJIntent.Create;
+    tmpIntent.setAction(TJIntent.JavaClass.ACTION_VIEW);
+    tmpIntent.setData(TJnet_Uri.JavaClass.parse(StringToJString(URL)));
+    MainActivity.startActivity(tmpIntent);
+    Exit;
+  }
+  {$ENDIF}
+
   {$IFDEF POSIX}
   _system(PAnsiChar('open '+AnsiString(URL)));
   {$ENDIF}

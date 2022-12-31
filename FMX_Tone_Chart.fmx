@@ -1,0 +1,39 @@
+object FormChart: TFormChart
+  Left = 0
+  Top = 0
+  Caption = 'Sound Wave Chart'
+  ClientHeight = 472
+  ClientWidth = 797
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Chart1: TChart
+    Foot.Font.StyleExt = {00040000000200000004000000}
+    Legend.Title.Font.StyleExt = {00070000000000000004000000}
+    Legend.Visible = False
+    SubFoot.Font.StyleExt = {00040000000200000004000000}
+    Title.Text.Strings = (
+      'TChart')
+    BottomAxis.Title.Caption = 'Sample'
+    View3D = False
+    Zoom.Brush.Kind = None
+    Zoom.Pen.Fill.Color = claSilver
+    Align = Client
+    TabOrder = 1
+    Size.Width = 797.000000000000000000
+    Size.Height = 472.000000000000000000
+    Size.PlatformDefault = False
+    ColorPaletteIndex = 1
+    object Series1: TFastLineSeries
+      HoverElement = []
+      LinePen.Color = xFF9999FF
+      LinePen.Fill.Color = xFF9999FF
+      XValues.Name = 'X'
+      XValues.Order = loAscending
+      YValues.Name = 'Y'
+      YValues.Order = loNone
+    end
+  end
+end

@@ -3,6 +3,8 @@ unit FMX_Tone;
 interface
 
 (*
+  https://github.com/davidberneda/FMX_Tone_Beep
+
   EXAMPLE:
 
     TTone.Play(440, 1000)  //  <---  "La" note, 1 second.
@@ -20,19 +22,25 @@ interface
 
 *)
 type
+  TWaveStyle=(Sine,Square); // TODO: Triangle, SawTooth
+
   TTone=record
   public
+    class var UsePCM : Boolean;  // Only for Windows, default is False
+    class var WaveStyle : TWaveStyle;  // Default is Sine
+
     // Duration in Milliseconds (minimum 2 in Windows)
     class procedure Beep(const ADuration: Integer); static;
 
     // Frequency in Hertz
     class procedure Play(const AFrequency:Single; const ADuration:Integer); static;
 
-    {$IFDEF MSWINDOWS}
-    // Same as "Play", but using PCM Wav generated data instead of Winapi Beep
-    class procedure PlayPCM(const AFrequency:Single; const ADuration:Integer); static;
-    {$ENDIF}
+    class function GenerateSamples(const AFrequency:Single; const ADuration:Integer):TArray<Single>; static;
   end;
+
+// TODO:
+// TTone.Volume:=50
+// waveoutsetvolume
 
 implementation
 
@@ -73,49 +81,55 @@ begin
 
   ToneGenerator := TJToneGenerator.JavaClass.init(StreamType, Volume);
   ToneGenerator.startTone(ToneType, ADuration);
+{$ELSE}
+begin
+ // TODO: MacOS, iOS
 {$ENDIF}
 {$ENDIF}
 {$ENDIF}
 end;
 
-const sampleRate = 8000;
+const
+  SampleRate = 8000; // 8KHz
 
-function Generate(const AFrequency:Single; const ADuration:Integer):{$IFDEF ANDROID}TJavaArray{$ELSE}TArray{$ENDIF}<Byte>;
+class function TTone.GenerateSamples(const AFrequency:Single; const ADuration:Integer):TArray<Single>;
 var
-  idx : Integer;
-  generatedSnd : {$IFDEF ANDROID}TJavaArray{$ELSE}TArray{$ENDIF}<Byte>;
+  Samples : TArray<Single>;
   tmp : Single;
+  tmpFreq : Integer;
 
   procedure SetGenerated(const Sample:Integer; const Val:Single);
-  var t : Integer;
   begin
-    t:=Round(Sin(Sample*tmp)*Val*32767);
+    case WaveStyle of
+      TWaveStyle.Sine:
+          Samples[Sample]:=Sin(Sample*tmp)*Val*0.5;
 
-    // in 16 bit wav PCM, first byte is the low order byte
-    generatedSnd[idx] := t and $00ff;
-    Inc(idx);
-    generatedSnd[idx] := (t and $ff00) shr 8;
-    Inc(idx);
+      TWaveStyle.Square:
+           if (Sample div tmpFreq) mod 2 = 0 then // <-- not correct
+              Samples[Sample]:=  1*tmp*Val
+           else
+              Samples[Sample]:= -1*tmp*Val;
+    end;
   end;
 
 var
   NumSamples : Integer;
   i, ramp : Integer;
 begin
-  NumSamples := Trunc(ADuration * SampleRate * 0.001 * 0.5);
+  NumSamples := Round(ADuration * SampleRate * 0.001 * 0.5);
+  SetLength(Samples,NumSamples);
 
-  {$IFDEF ANDROID}
-  generatedSnd:=TJavaArray<Byte>.Create(2*numSamples);
-  {$ELSE}
-  SetLength(generatedSnd,2*NumSamples);
-  {$ENDIF}
-
-  tmp:=(AFrequency * 2 * PI) / sampleRate;
+  case WaveStyle of
+    TWaveStyle.Sine: tmp:=(AFrequency * 2 * PI) / SampleRate;
+  else
+  begin
+    tmp:=0.5;
+    tmpFreq:=Round(0.5*SampleRate/AFrequency);
+  end;
+  end;
 
   // Amplitude ramp as a percent of sample count
-  ramp := NumSamples div 120;
-
-  idx := 0;
+  ramp := NumSamples div 80;
 
   // Ramp amplitude up (to avoid clicks)
   for i:=0 to ramp-1 do
@@ -127,16 +141,42 @@ begin
 
   // Ramp amplitude down
   for i:=1 + (NumSamples-1) - ramp to NumSamples-1 do
-      SetGenerated(i,(numSamples-i)/ramp); // Ramp down to zero
+      SetGenerated(i,((NumSamples-1)-i)/ramp); // Ramp down to zero
 
-  result:=generatedSnd;
+  result:=Samples;
+end;
+
+function Generate(const AFrequency:Single; const ADuration:Integer):{$IFDEF ANDROID}TJavaArray{$ELSE}TArray{$ENDIF}<Byte>;
+var idx,
+    t, tmp : Integer;
+    Samples : TArray<Single>;
+begin
+  Samples:=TTone.GenerateSamples(AFrequency,ADuration);
+
+  {$IFDEF ANDROID}
+  result:=TJavaArray<Byte>.Create(2*Length(Samples));
+  {$ELSE}
+  SetLength(result,2*Length(Samples));
+  {$ENDIF}
+
+  idx:=0;
+
+  for t:=0 to High(Samples) do
+  begin
+    tmp:=Round(Samples[t]*32767);
+
+    result[idx] := tmp and $00ff;
+    Inc(idx);
+    result[idx] := (tmp and $ff00) shr 8;
+    Inc(idx);
+  end;
 end;
 
 {$IFDEF MSWINDOWS}
 
 // Code from:
 // https://stackoverflow.com/questions/26917558/playing-pcm-wav-file-in-delphi
-class procedure TTone.PlayPCM(const AFrequency:Single; const ADuration:Integer);
+procedure PlayPCM(const AFrequency:Single; const ADuration:Integer);
 
   function InitAudioSys:TWaveFormatEx;
   begin
@@ -202,7 +242,10 @@ end;
 class procedure TTone.Play(const AFrequency:Single; const ADuration:Integer);
 {$IFDEF MSWINDOWS}
 begin
-  Winapi.Windows.Beep(Round(AFrequency),ADuration);
+  if UsePCM then
+     PlayPCM(AFrequency,ADuration)
+  else
+     Winapi.Windows.Beep(Round(AFrequency),ADuration);
 {$ELSE}
 {$IFDEF LINUX}
 begin
@@ -210,19 +253,19 @@ begin
 {$ELSE}
 {$IFDEF ANDROID}
 var
-  bufferSize : Integer;
+  BufferSize : Integer;
   iaudioTrack :  JAudioTrack;
   generatedSnd : TJavaArray<Byte>;
 begin
   generatedSnd:=Generate(AFrequency,ADuration);
 
-  bufferSize := TJAudioTrack.JavaClass.getMinBufferSize(sampleRate,
+  BufferSize := TJAudioTrack.JavaClass.getMinBufferSize(SampleRate,
         TJAudioFormat.JavaClass.CHANNEL_OUT_MONO,
         TJAudioFormat.JavaClass.ENCODING_PCM_16BIT);
 
   iaudioTrack:= TJAudioTrack.JavaClass.init(TJAudioManager.JavaClass.STREAM_MUSIC,
-                sampleRate, TJAudioFormat.JavaClass.CHANNEL_OUT_MONO,
-                TJAudioFormat.JavaClass.ENCODING_PCM_16BIT, bufferSize,
+                SampleRate, TJAudioFormat.JavaClass.CHANNEL_OUT_MONO,
+                TJAudioFormat.JavaClass.ENCODING_PCM_16BIT, BufferSize,
                 TJAudioTrack.JavaClass.MODE_STREAM);
   try
     // Play the track
@@ -238,9 +281,5 @@ begin
 {$ENDIF}
 end;
 
-
-// TODO:
-// TTone.Volume:=50
-// waveoutsetvolume
 
 end.
