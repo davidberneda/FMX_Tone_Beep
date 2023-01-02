@@ -23,7 +23,7 @@ object FormChart: TFormChart
     Align = Client
     TabOrder = 1
     Size.Width = 797.000000000000000000
-    Size.Height = 472.000000000000000000
+    Size.Height = 422.000000000000000000
     Size.PlatformDefault = False
     ColorPaletteIndex = 1
     object Series1: TFastLineSeries
@@ -34,6 +34,20 @@ object FormChart: TFormChart
       XValues.Order = loAscending
       YValues.Name = 'Y'
       YValues.Order = loNone
+    end
+  end
+  object Layout1: TLayout
+    Align = Top
+    Size.Width = 797.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 3
+    object Button1: TButton
+      Position.X = 14.000000000000000000
+      Position.Y = 12.000000000000000000
+      TabOrder = 0
+      Text = '&Play'
+      OnClick = Button1Click
     end
   end
 end

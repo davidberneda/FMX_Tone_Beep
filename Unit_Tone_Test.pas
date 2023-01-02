@@ -5,7 +5,7 @@ interface
 // https://github.com/davidberneda/FMX_Tone_Beep
 
 // Enable this DEFINE if you have TeeChart components installed.
-{.$DEFINE TEECHART}  // <-- remove the "."
+{$DEFINE TEECHART}  // <-- remove the "."
 
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
@@ -39,6 +39,10 @@ type
     ButtonChart: TButton;
     CBUsePCM: TCheckBox;
     CBWave: TComboBox;
+    CBSampleRate: TComboBox;
+    TBVolume: TTrackBar;
+    TextVolume: TText;
+    Label3: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure TBDurationChange(Sender: TObject);
@@ -50,6 +54,9 @@ type
     procedure ButtonChartClick(Sender: TObject);
     procedure CBUsePCMChange(Sender: TObject);
     procedure CBWaveChange(Sender: TObject);
+    procedure CBSampleRateChange(Sender: TObject);
+    procedure TBVolumeChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
 
@@ -88,6 +95,8 @@ end;
 
 procedure TToneDemo.FormCreate(Sender: TObject);
 begin
+  CBUsePCM.IsChecked:=TTone.UsePCM;
+
   {$IFNDEF MSWINDOWS}
   CBUsePCM.Visible:=False;
   {$ENDIF}
@@ -95,6 +104,11 @@ begin
   {$IFNDEF TEECHART}
   ButtonChart.Visible:=False;
   {$ENDIF}
+end;
+
+procedure TToneDemo.FormShow(Sender: TObject);
+begin
+  TBVolume.Value:=TTone.Volume;
 end;
 
 procedure TToneDemo.GitHubClick(Sender: TObject);
@@ -112,11 +126,25 @@ begin
   TTone.Play(Round(TBFrequency.Value), Duration);
 end;
 
+procedure TToneDemo.CBSampleRateChange(Sender: TObject);
+begin
+  case CBSampleRate.ItemIndex of
+   0 : TTone.SampleRate:=TSampleRate.SampleRate8000;
+   1 : TTone.SampleRate:=TSampleRate.SampleRate11025;
+   2 : TTone.SampleRate:=TSampleRate.SampleRate22050;
+   3 : TTone.SampleRate:=TSampleRate.SampleRate44100;
+  end;
+end;
+
 procedure TToneDemo.CBUsePCMChange(Sender: TObject);
 begin
-  {$IFDEF MSWINDOWS}
   TTone.UsePCM:=CBUsePCM.IsChecked;
-  {$ENDIF}
+
+  CBWave.Enabled:=TTone.UsePCM;
+  CBSampleRate.Enabled:=TTone.UsePCM;
+
+  TBVolume.Enabled:=TTone.UsePCM;
+  TextVolume.Enabled:=TTone.UsePCM;
 end;
 
 procedure TToneDemo.CBWaveChange(Sender: TObject);
@@ -152,6 +180,12 @@ end;
 procedure TToneDemo.TBFrequencyChange(Sender: TObject);
 begin
   TextFrequency.Text := Round(TBFrequency.Value).ToString+' Hertz';
+end;
+
+procedure TToneDemo.TBVolumeChange(Sender: TObject);
+begin
+  TTone.Volume:=Round(TBVolume.Value);
+  TextVolume.Text:=TTone.Volume.ToString+' %';
 end;
 
 end.

@@ -2,13 +2,14 @@ object ToneDemo: TToneDemo
   Left = 0
   Top = 0
   Caption = 'FMX Tone Test Demo'
-  ClientHeight = 434
-  ClientWidth = 354
+  ClientHeight = 490
+  ClientWidth = 351
   Position = ScreenCenter
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
+  OnShow = FormShow
   DesignerMasterStyle = 0
   object Button1: TButton
     Position.X = 17.000000000000000000
@@ -18,8 +19,8 @@ object ToneDemo: TToneDemo
     OnClick = Button1Click
   end
   object Button2: TButton
-    Position.X = 17.000000000000000000
-    Position.Y = 158.000000000000000000
+    Position.X = 18.000000000000000000
+    Position.Y = 217.000000000000000000
     TabOrder = 0
     Text = '&Play'
     OnClick = Button2Click
@@ -29,15 +30,15 @@ object ToneDemo: TToneDemo
     Max = 1000.000000000000000000
     Min = 1.000000000000000000
     Orientation = Horizontal
-    Position.X = 17.000000000000000000
-    Position.Y = 102.000000000000000000
+    Position.X = 18.000000000000000000
+    Position.Y = 95.000000000000000000
     TabOrder = 3
     Value = 200.000000000000000000
     OnChange = TBDurationChange
   end
   object TextDuration: TText
-    Position.X = 125.000000000000000000
-    Position.Y = 104.000000000000000000
+    Position.X = 126.000000000000000000
+    Position.Y = 97.000000000000000000
     Size.Width = 114.000000000000000000
     Size.Height = 16.000000000000000000
     Size.PlatformDefault = False
@@ -45,18 +46,18 @@ object ToneDemo: TToneDemo
   end
   object Label1: TLabel
     FocusControl = TBDuration
-    Position.X = 15.000000000000000000
-    Position.Y = 62.000000000000000000
+    Position.X = 16.000000000000000000
+    Position.Y = 55.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 39.000000000000000000
     Size.PlatformDefault = False
     Text = '&Duration:'
-    TabOrder = 6
+    TabOrder = 7
   end
   object Label2: TLabel
     FocusControl = TBFrequency
-    Position.X = 15.000000000000000000
-    Position.Y = 206.000000000000000000
+    Position.X = 18.000000000000000000
+    Position.Y = 125.000000000000000000
     Size.Width = 120.000000000000000000
     Size.Height = 46.000000000000000000
     Size.PlatformDefault = False
@@ -68,27 +69,27 @@ object ToneDemo: TToneDemo
     Max = 3000.000000000000000000
     Min = 1.000000000000000000
     Orientation = Horizontal
-    Position.X = 17.000000000000000000
-    Position.Y = 253.000000000000000000
+    Position.X = 18.000000000000000000
+    Position.Y = 177.000000000000000000
     TabOrder = 2
     Value = 1000.000000000000000000
     OnChange = TBFrequencyChange
   end
   object TextFrequency: TText
-    Position.X = 125.000000000000000000
-    Position.Y = 255.000000000000000000
+    Position.X = 126.000000000000000000
+    Position.Y = 179.000000000000000000
     Size.Width = 114.000000000000000000
     Size.Height = 16.000000000000000000
     Size.PlatformDefault = False
     Text = '1000 Hertz'
   end
   object Layout1: TLayout
-    Position.X = 17.000000000000000000
-    Position.Y = 295.000000000000000000
+    Position.X = 18.000000000000000000
+    Position.Y = 342.000000000000000000
     Size.Width = 210.000000000000000000
     Size.Height = 77.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 8
+    TabOrder = 9
     object RectangleDo: TRectangle
       Align = Left
       Cursor = crHandPoint
@@ -213,8 +214,8 @@ object ToneDemo: TToneDemo
   end
   object GitHub: TText
     Cursor = crHandPoint
-    Position.X = 17.000000000000000000
-    Position.Y = 396.000000000000000000
+    Position.X = 18.000000000000000000
+    Position.Y = 443.000000000000000000
     Size.Width = 321.000000000000000000
     Size.Height = 17.000000000000000000
     Size.PlatformDefault = False
@@ -226,31 +227,76 @@ object ToneDemo: TToneDemo
   object ButtonChart: TButton
     Position.X = 117.000000000000000000
     Position.Y = 14.000000000000000000
-    TabOrder = 10
+    TabOrder = 11
     Text = '&Chart'
     OnClick = ButtonChartClick
   end
   object CBUsePCM: TCheckBox
-    Position.X = 125.000000000000000000
-    Position.Y = 150.000000000000000000
+    Position.X = 18.000000000000000000
+    Position.Y = 256.000000000000000000
     Size.Width = 140.000000000000000000
     Size.Height = 19.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 11
+    TabOrder = 12
     Text = '&Use PCM'
     OnChange = CBUsePCMChange
   end
   object CBWave: TComboBox
+    Enabled = False
     Items.Strings = (
       'Sine'
       'Square')
     ItemIndex = 0
-    Position.X = 125.000000000000000000
-    Position.Y = 177.000000000000000000
-    Size.Width = 152.000000000000000000
+    Position.X = 18.000000000000000000
+    Position.Y = 283.000000000000000000
+    Size.Width = 102.000000000000000000
     Size.Height = 32.000000000000000000
     Size.PlatformDefault = False
-    TabOrder = 16
+    TabOrder = 18
     OnChange = CBWaveChange
+  end
+  object CBSampleRate: TComboBox
+    Enabled = False
+    Items.Strings = (
+      '8000 Hz'
+      '11025 Hz'
+      '22050 Hz'
+      '44100 Hz')
+    ItemIndex = 0
+    Position.X = 143.000000000000000000
+    Position.Y = 283.000000000000000000
+    Size.Width = 102.000000000000000000
+    Size.Height = 32.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 17
+    OnChange = CBSampleRateChange
+  end
+  object TBVolume: TTrackBar
+    CanParentFocus = True
+    Enabled = False
+    Orientation = Horizontal
+    Position.X = 138.000000000000000000
+    Position.Y = 252.000000000000000000
+    TabOrder = 19
+    OnChange = TBVolumeChange
+  end
+  object TextVolume: TText
+    Enabled = False
+    Position.X = 246.000000000000000000
+    Position.Y = 252.000000000000000000
+    Size.Width = 56.000000000000000000
+    Size.Height = 16.000000000000000000
+    Size.PlatformDefault = False
+    Text = '%'
+  end
+  object Label3: TLabel
+    FocusControl = TBVolume
+    Position.X = 138.000000000000000000
+    Position.Y = 211.000000000000000000
+    Size.Width = 120.000000000000000000
+    Size.Height = 39.000000000000000000
+    Size.PlatformDefault = False
+    Text = '&Volume:'
+    TabOrder = 6
   end
 end
